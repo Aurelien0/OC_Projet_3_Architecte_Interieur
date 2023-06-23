@@ -186,3 +186,21 @@ footer nav ul {
 	margin: 2em
 }
 
+
+/* Section portfolio */
+
+#filter-bar button{
+	border:#1D6154 1px solid;
+	border-radius: 60px;
+	padding: 21px;
+}
+
+#portfolio .gallery{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 30px;
+}
+
+#portfolio ul {
+	list-style-type: none;
+}
