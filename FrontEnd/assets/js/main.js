@@ -1,40 +1,5 @@
-// fetch('http://localhost:5678/api/works')
-//   .then(response => response.json())
-//   .then(data => {
-//     // Traitement des données reçues
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     // Gestion des erreurs
-//     console.error('Une erreur s\'est produite:', error);
-//   });
 
-
-
-
-// fetch('http://localhost:5678/api/works')
-//   .then(response => response.json())
-//   .then(data => {
-//     // Manipulation du DOM pour afficher les données
-//     const product1 = document.getElementById('portfolio');
-//     const productTitle1 = product1.querySelector('.product-title');
-//     const productDescription1 = product1.querySelector('.product-description');
-//     const productImage1 = product1.querySelector('.product-image');
-//     const productPrice1 = product1.querySelector('.product-price');
-
-//     // Injecter les données dans les éléments correspondants
-//     productTitle1.textContent = data[0].title;
-//     productDescription1.textContent = data[0].description;
-//     productImage1.src = data[0].image;
-//     productPrice1.textContent = data[0].price;
-
-//     // Répéter les étapes ci-dessus pour les autres produits (product2, product3, ...)
-//   })
-//   .catch(error => {
-//     // Gestion des erreurs
-//     console.error('Une erreur s\'est produite:', error);
-//   });
-
+/* Section Portfolio, récupération et affichage des projets */ 
 
 fetch('http://localhost:5678/api/works')
   .then(response => response.json())
@@ -58,12 +23,10 @@ fetch('http://localhost:5678/api/works')
       projetImage.src = projetData.imageUrl;
       projetImage.alt = projetData.title;
 
+      // Ajouter dynamiquement au html en data-value l'id de la catégorie de chaque bouton filtre et projet
 
       projetLi.dataset.value = projetData.category.id;
-      console.log(projetLi)
-
       const projet = projetData.category.id;
-      console.log(projet)
 
 
       // Ajouter les éléments à la case de produit
@@ -81,90 +44,48 @@ fetch('http://localhost:5678/api/works')
   });
 
 
+/* Filter-bar pour trier les projets selon leur catégorie */ 
 
-  fetch('http://localhost:5678/api/categories')
+// Récupérer les catégories depuis l'API
+fetch('http://localhost:5678/api/categories')
   .then(response => response.json())
-  .then(data => {
-    const filterContainer = document.getElementById('filter-bar')
+  .then(categories => {
+    const filterBar = document.getElementById('filter-bar');
 
-    data.forEach(categoryData => {
-      const projetCategory = document.createElement('button')
-      projetCategory.classList.add('filter-button');
-      projetCategory.textContent = categoryData.name
+    // Créer l'option "Tous" par défaut
+    const allOption = document.createElement('button');
+    allOption.classList.add('filter-option');
+    allOption.textContent = 'Tous';
+    filterBar.appendChild(allOption);
 
-      projetCategory.dataset.value = categoryData.id;
-      console.log(projetCategory)
-    //   projetCategory.addEventListener("click", function () {
-    //     const projetFiltre = pieces.filter(function (piece) {
-    //         return piece.prix <= 35;
-    //     });
-    //    console.log(projetFiltre)
-    // });
+    // Parcourir les catégories et générer les options de filtrage
+    categories.forEach(category => {
+      const option = document.createElement('button');
+      option.classList.add('filter-option');
+      option.textContent = category.name;
+      option.dataset.categoryId = category.id;
+      filterBar.appendChild(option);
+    });
 
+    // Filtrer les projets lorsqu'une option est sélectionnée
+    filterBar.addEventListener('click', event => {
+      const selectedOption = event.target;
+      if (selectedOption.classList.contains('filter-option')) {
+        const categoryId = selectedOption.dataset.categoryId;
 
-      filterContainer.appendChild(projetCategory)
-
-      console.log(categoryData)
-      //console.log(projetCategory)
-
+        // Afficher uniquement les projets correspondant à la catégorie sélectionnée
+        const projects = document.getElementsByClassName('projet');
+        Array.from(projects).forEach(project => {
+          if (categoryId === undefined || project.dataset.value === categoryId) {
+            project.style.display = 'block';
+          } else {
+            project.style.display = 'none';
+          }
+        });
+      }
     });
   })
   .catch(error => {
-    console.error('Il y a une erreur pour récupérer et ajouter les filtres par catégories', error);
+    console.error('Il y a une erreur pour récupérer et ajouter les catégories', error);
   });
 
-
-  // fetch('http://localhost:5678/api/categories')
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     // Étape 2 : Extraire les catégories distinctes
-  //     const categories = [...new Set(data.map(category => category.name))];
-  //     console.log(categories)
-  
-  //     // Étape 3 : Générer les filtres de catégorie
-  //     const filterBar = document.getElementById('filter-bar');
-  
-  //     categories.forEach(category => {
-  //       const filterItem = document.createElement('button');
-  //       filterItem.classList.add('filter-item');
-  //       filterItem.textContent = category;
-  //       filterItem.addEventListener('click', () => {
-  //         filterProductsByCategory(category);
-  //       });
-  
-  //       filterBar.appendChild(filterItem);
-  //     });
-  
-  //     // Étape 4 : Filtrer les produits par catégorie
-  //     function filtrerElementsParCategorie(categorie) {
-  //       const elements = listeElements.getElementsByClassName('projet');
-        
-  //       for (let i = 0; i < elements.length; i++) {
-  //         const element = elements[i];
-          
-  //         if (categorie === 'tous' || element.classList.contains(categorie)) {
-  //           element.style.display = 'block'; // Afficher l'élément
-  //         } else {
-  //           element.style.display = 'none'; // Masquer l'élément
-  //         }
-  //       }
-  //     }
-      
-  
-  //     // Afficher les produits initialement
-  //     displayProducts(data);
-  //   })
-  //   .catch(error => {
-  //     // Gestion des erreurs
-  //     console.error('Une erreur s\'est produite:', error);
-  //   });
-  
-  // // Fonction pour afficher les produits dans le DOM
-  // function displayProducts(products) {
-  //   const productContainer = document.getElementById('portfolio');
-  //   productContainer.innerHTML = '';
-  
-  //   products.forEach(product => {
-  //     const productDiv = document.createElement('div');
-  //     productDiv.classList.add('product');
-  //   }

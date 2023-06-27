@@ -189,10 +189,29 @@ footer nav ul {
 
 /* Section portfolio */
 
+#filter-bar {
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+	margin-bottom: 3em;
+}
+
 #filter-bar button{
 	border:#1D6154 1px solid;
+	background-color: #FFF;
 	border-radius: 60px;
-	padding: 21px;
+	padding: 12px;
+	font-size: 16px;
+}
+
+#filter-bar button:hover {
+	background-color: #1D6154;
+	color: #FFF;
+	cursor: pointer;
+}
+
+.filter-option:active{
+	background-color: red;
 }
 
 #portfolio .gallery{
@@ -204,3 +223,5 @@ footer nav ul {
 #portfolio ul {
 	list-style-type: none;
 }
+
+/* Fin section portfolio */ 
