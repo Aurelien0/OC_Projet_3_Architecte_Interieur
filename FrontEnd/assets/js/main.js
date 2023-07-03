@@ -56,6 +56,9 @@ fetch('http://localhost:5678/api/categories')
     const allOption = document.createElement('button');
     allOption.classList.add('filter-option');
     allOption.textContent = 'Tous';
+
+    allOption.id = 'active-filter-option'; // Ajoutez cette ligne pour pré-sélectionner l'option "Tous"
+
     filterBar.appendChild(allOption);
 
     // Parcourir les catégories et générer les options de filtrage
@@ -71,7 +74,14 @@ fetch('http://localhost:5678/api/categories')
     filterBar.addEventListener('click', event => {
       const selectedOption = event.target;
       if (selectedOption.classList.contains('filter-option')) {
+
+        // const option = document.getElementsByClassName('filter-option');
+        // console.log('option');
+        // option.removeAttribute('id');
+        // selectedOption.id = ('active-filter-option');
+
         const categoryId = selectedOption.dataset.categoryId;
+
 
         // Afficher uniquement les projets correspondant à la catégorie sélectionnée
         const projects = document.getElementsByClassName('projet');
@@ -83,9 +93,25 @@ fetch('http://localhost:5678/api/categories')
           }
         });
       }
+
+      const clickedOption = event.target;
+      if (clickedOption.classList.contains('filter-option')) {
+        const categoryId = clickedOption.dataset.categoryId;
+    
+        // Supprimez l'ID de l'option précédemment sélectionnée
+        const previousOption = filterBar.querySelector('#active-filter-option');
+        if (previousOption) {
+          previousOption.removeAttribute('id');
+        }
+    
+        // Mettez à jour l'option sélectionnée
+        clickedOption.id = 'active-filter-option';
+    
+        // Reste du code...
+      }
+
     });
   })
   .catch(error => {
     console.error('Il y a une erreur pour récupérer et ajouter les catégories', error);
   });
-

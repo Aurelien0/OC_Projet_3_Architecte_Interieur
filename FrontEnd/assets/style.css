@@ -3,6 +3,10 @@
    License: none (public domain)
 */
 
+html {
+	background-color: #fffef8;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -205,13 +209,13 @@ footer nav ul {
 }
 
 #filter-bar button:hover {
-	background-color: #1D6154;
-	color: #FFF;
 	cursor: pointer;
 }
 
-.filter-option:active{
-	background-color: red;
+#active-filter-option {
+	background-color: #1D6154 !important;
+	color: #FFF;
+	cursor: pointer;
 }
 
 #portfolio .gallery{
@@ -225,3 +229,33 @@ footer nav ul {
 }
 
 /* Fin section portfolio */ 
+
+/* Page login.html */
+
+#login form {
+	display: flex;
+	flex-direction: column;
+}
+
+
+#login input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#login label {
+	margin: 2em 0 1em 0;
+	text-align: left;
+}
+
+#login {
+	width: 50%;
+	margin: auto;
+	text-align: center;
+}
+
+.active-nav-link {
+	font-weight: 600;
+}
