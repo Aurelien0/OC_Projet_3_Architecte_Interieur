@@ -14,8 +14,8 @@ submitButton.addEventListener('click', (event) => {
 
   // Créer l'objet de données à envoyer dans la requête POST
   const data = {
-    "email": emailValue,
-    "password": passwordValue
+    email: emailValue,
+    password: passwordValue
   };
 
   // Effectuer la requête POST avec fetch()
@@ -29,16 +29,28 @@ submitButton.addEventListener('click', (event) => {
     .then(response => response.json())
     .then(responseData => {
       // Comparer les valeurs obtenues avec celles du formulaire
-    //   if (emailValue === responseData.email && passwordValue === responseData.password) {
-        if (emailValue === "sophie.bluel@test.tld" && passwordValue === "S0phie") {
-        // Afficher un message de connexion réussie
-        window.location.href = 'index.html?mode=admin';
-        console.log('Connecté');
-      } else {
-        // Afficher une erreur
-        console.log(responseData.email)
-        console.error('Erreur de connexion');
-      }
+if (responseData.token) {
+
+  localStorage.setItem('token', responseData.token)
+  // if (emailValue === "sophie.bluel@test.tld" && passwordValue === "S0phie") {
+// Afficher un message de connexion réussie
+window.location.href = 'index.html';
+// window.location.href = 'index.html?mode=admin';
+console.log('Connecté');
+console.log(localStorage.getItem('token'));
+
+} else {
+      //   // Afficher une erreur
+      const formContainer = document.getElementById('formulaireLogin');
+      const messageErreur = document.createElement('p');
+      messageErreur.classList.add('message-erreur');
+      messageErreur.textContent = 'Erreur dans l\'identifiant ou le mot de passe';
+
+      const cinquiemeEnfant = formContainer.children[4];
+
+      formContainer.insertBefore(messageErreur, cinquiemeEnfant)
+        console.log(responseData);
+}
     })
     .catch(error => {
       // Traiter les erreurs éventuelles
