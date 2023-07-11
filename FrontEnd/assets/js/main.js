@@ -23,6 +23,10 @@ fetch('http://localhost:5678/api/works')
       projetImage.src = projetData.imageUrl;
       projetImage.alt = projetData.title;
 
+      // récupérer l'id de chaque projet 
+      // let dataIdImageModal = projetData.id;
+      // console.log(dataIdImageModal)
+
       // Ajouter dynamiquement au html en data-value l'id de la catégorie de chaque bouton filtre et projet
 
       projetLi.dataset.value = projetData.category.id;
@@ -164,12 +168,14 @@ fetch('http://localhost:5678/api/categories')
 
 		// Fonction de déconnexion
 		function logout() {
-      localStorage.removeItem("token");
+      localStorage.clear();
+      location.reload()
 		}
 	
 
     // Buttons Modifier
     const projetContainer = document.getElementById('titre-portfolio');
+
     const buttonModifier = document.createElement('button');
     buttonModifier.id = 'button-modifier-admin';
     const texteButtonModifier = document.createElement('p');
@@ -199,7 +205,36 @@ fetch('http://localhost:5678/api/categories')
       const iconButtonCloseModal = document.createElement('img');
       iconButtonCloseModal.src = './assets/icons/button-close.png';
 
-      const titleModal = document.createElement('h2');
+      // fermer la modale
+      // buttonCloseModal.addEventListener('click', (event) => {
+      //   modalManageProjectAdmin.remove()
+      // });
+
+// Créer une fonction pour fermer la modale
+function closeModal() {
+  const modalManageProjectAdmin = document.getElementById('modale-manage-project-admin');
+  modalManageProjectAdmin.remove();
+}
+
+// Ajouter un gestionnaire d'événement au bouton de fermeture
+buttonCloseModal.addEventListener('click', (event) => {
+  closeModal();
+});
+
+// Ajouter un gestionnaire d'événement à la fenêtre pour fermer la modale en cliquant à l'extérieur
+window.addEventListener('click', (event) => {
+  if (event.target === modalManageProjectAdmin) {
+    closeModal();
+  }
+});
+
+
+
+
+
+
+
+      const titleModal = document.createElement('h1');
       titleModal.textContent = 'Galerie photo';
 
       bodyContainer.appendChild(modalManageProjectAdmin);
@@ -242,15 +277,70 @@ fetch('http://localhost:5678/api/categories')
         grilleApercuImageModal.classList = 'grille-apercu-image-modal';
     
         for (const apercuImageLinkData of apercuImageData) {
+
+
+          const liApercuImageModal = document.createElement('li');
+
           const apercuImageModal = document.createElement('img');
           apercuImageModal.src = apercuImageLinkData.imageUrl;
           apercuImageModal.classList = 'apercu-image-modal';
+
+
+
+
+          const linkIconDeleteImageModal = document.createElement('a');
+          linkIconDeleteImageModal.id = 'link-icon-delete-admin-modal';
+          linkIconDeleteImageModal.dataset.id = apercuImageLinkData.id;
+
+
+          const iconDeleteImageModal = document.createElement('img');
+          iconDeleteImageModal.src = './assets/icons/icon-delete.png';
+          iconDeleteImageModal.classList = 'icon-delete-admin-modal';
+
+          const linkApercuImageModal = document.createElement('a');
+          linkApercuImageModal.textContent = 'éditer';
     
-          grilleApercuImageModal.appendChild(apercuImageModal);
-        }
+          grilleApercuImageModal.appendChild(liApercuImageModal);
+          liApercuImageModal.appendChild(apercuImageModal);
+          liApercuImageModal.appendChild(linkIconDeleteImageModal);
+          linkIconDeleteImageModal.appendChild(iconDeleteImageModal);
+          liApercuImageModal.appendChild(linkApercuImageModal);
+
+
+
+          linkIconDeleteImageModal.addEventListener('click', (event) => {
+
+            let actuelDataCompteurModal = linkIconDeleteImageModal.dataset.id;
+
+            console.log(actuelDataCompteurModal);
+
+            fetch(`http://localhost:5678/api/works/${actuelDataCompteurModal}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Ajout du jeton d'authentification dans l'en-tête
+              },
+            })
+              .then(response => {
+                const statusCode = response.status; // Récupération du code d'état de la réponse
+                console.log(statusCode); // Affichage du code d'état dans la console
+                if (statusCode === 200 || statusCode === 204) {
+                  liApercuImageModal.remove(); // Supprime l'élément de la liste
+                  alert(`Vous avez bien supprimer la photo ${actuelDataCompteurModal}`)
+                } else {
+                  alert(`Il y a une erreur pour supprimer la photo ${actuelDataCompteurModal}`)
+                }
+              })
+              .catch(error => {
+                // Gérez les erreurs ici
+              });
+        });
+
+        } //fin de la boucle for
     
         modalManageProjectAdminWrapper.appendChild(grilleApercuImageModal);
         modalManageProjectAdminWrapper.appendChild(buttonAddImage);
+        modalManageProjectAdminWrapper.appendChild(buttonDeleteAllImage);
       } catch (error) {
         console.log(error);
       }
@@ -258,6 +348,11 @@ fetch('http://localhost:5678/api/categories')
     
     const buttonAddImage = document.createElement('button');
     buttonAddImage.id = 'button-add-image-modal';
+    buttonAddImage.textContent = 'Ajouter une photo';
+
+    const buttonDeleteAllImage = document.createElement('a');
+    buttonDeleteAllImage.id = 'delete-all-image';
+    buttonDeleteAllImage.textContent = 'Supprimer la galerie'
     
     async function loadContent() {
       await createApercuImages();
@@ -265,6 +360,159 @@ fetch('http://localhost:5678/api/categories')
     
     loadContent();
     
+
+    // ouvrir modale ajouter une photo
+
+    function openModalAddImage() {
+
+      const modalAddImageAdmin = document.createElement('aside');
+      modalAddImageAdmin.id = 'modale-add-image-admin';
+
+      const modalAddImageAdminWrapper = document.createElement('div');
+      modalAddImageAdminWrapper.classList = 'modale-add-image-admin-wrapper';
+
+      const buttonGoBackModalAddImage = document.createElement('button');
+      buttonGoBackModalAddImage.id = 'button-go-back-modal';
+      const iconButtonGoBackModalAddImage = document.createElement('img');
+      iconButtonGoBackModalAddImage.src = './assets/icons/arrow-left.png';
+
+      const buttonCloseModalAddImage = document.createElement('button');
+      buttonCloseModalAddImage.id = 'button-close-modal-add-image';
+      const iconButtonCloseModalAddImage = document.createElement('img');
+      iconButtonCloseModalAddImage.src = './assets/icons/button-close.png';
+
+      const titleModalAddImage = document.createElement('h2');
+      titleModalAddImage.textContent = 'Ajout photo'
+
+      const formModalAddImage = document.createElement('form')
+      formModalAddImage.id = 'form-modal-add-image'
+
+      const divFileAddImage = document.createElement('div')
+      divFileAddImage.id = 'div-file-add-image'
+
+      const inputFileAddimage = document.createElement('input')
+      inputFileAddimage.id = 'input-file-add-image'
+      inputFileAddimage.type = 'file'
+      inputFileAddimage.accept = '.png, .jpg'
+      // inputFileAddimage.maxLength = '4'
+
+      const buttonFileAddImage = document.createElement('button')
+      buttonFileAddImage.id = 'button-file-add-image'
+      buttonFileAddImage.textContent = '+ Ajouter photo'
+      buttonFileAddImage.addEventListener ('click', (event) => {
+        event.preventDefault();
+        document.getElementById('input-file-add-image').click()
+      })
+
+      const imageDefaultModalAddImage = document.createElement('img')
+      imageDefaultModalAddImage.src = './assets/icons/image-default.png'
+
+      const textAddImageModal = document.createElement('p')
+      textAddImageModal.textContent = 'jpg, png : 4mo max'
+
+
+// Ajouter un gestionnaire d'événement pour vérifier la taille du fichier lors de la sélection
+inputFileAddimage.addEventListener('change', function(event) {
+  event.preventDefault();
+  const file = event.target.files[0];
+  
+  // Vérifier la taille du fichier
+  const maxSize = 4 * 1024 * 1024; // 4 Mo en octets
+  if (file.size > maxSize) {
+    alert('La taille du fichier est supérieure à 4 Mo.');
+    inputFileAddimage.value = ''; // Réinitialiser la valeur de l'input pour effacer le fichier sélectionné
+  }
+});
+
+const labelAddImageModal = document.createElement('label')
+labelAddImageModal.textContent = 'titre'
+
+const secondLabelAddImageModal = document.createElement('label')
+secondLabelAddImageModal.textContent = 'Catégorie'
+
+const inputSubmitAddImage = document.createElement('input');
+inputSubmitAddImage.type = 'submit'
+inputSubmitAddImage.value = 'Valider'
+
+// form.addEventListener('submit', (event) => {
+//   event.preventDefault(); // Empêche l'envoi du formulaire par défaut
+
+//   const file = imageInput.files[0];
+
+//   if (file) {
+//     // Vérifier le type de fichier
+//     const fileType = file.type;
+//     if (fileType !== 'image/png' && fileType !== 'image/jpeg') {
+//       alert('Veuillez sélectionner un fichier PNG ou JPEG.');
+//       return;
+//     }
+
+//     // Vérifier la taille du fichier
+//     const maxSize = parseInt(imageInput.getAttribute('max-size'), 10) * 1024 * 1024; // Convertir la taille maximale en octets
+//     if (file.size > maxSize) {
+//       alert('La taille du fichier est supérieure à 4 Mo.');
+//       return;
+//     }
+
+//     // Le fichier est valide, vous pouvez le traiter ou l'envoyer au serveur ici
+//     // Utilisez la variable "file" pour accéder au fichier
+
+//     // Réinitialiser le formulaire
+//     form.reset();
+//   } else {
+//     alert('Veuillez sélectionner un fichier.');
+//   }
+// });
+
+
+
+      bodyContainer.appendChild(modalAddImageAdmin)
+      modalAddImageAdmin.appendChild(modalAddImageAdminWrapper)
+      modalAddImageAdminWrapper.appendChild(buttonGoBackModalAddImage)
+      buttonGoBackModalAddImage.appendChild(iconButtonGoBackModalAddImage)
+      modalAddImageAdminWrapper.appendChild(buttonCloseModalAddImage)
+      buttonCloseModalAddImage.appendChild(iconButtonCloseModalAddImage)
+      modalAddImageAdminWrapper.appendChild(titleModalAddImage)
+
+      modalAddImageAdminWrapper.appendChild(formModalAddImage)
+
+      formModalAddImage.appendChild(divFileAddImage)
+      divFileAddImage.appendChild(imageDefaultModalAddImage)
+      divFileAddImage.appendChild(inputFileAddimage)
+      divFileAddImage.appendChild(buttonFileAddImage)
+      divFileAddImage.appendChild(textAddImageModal)
+      formModalAddImage.appendChild(labelAddImageModal)
+      formModalAddImage.appendChild(secondLabelAddImageModal)
+      formModalAddImage.appendChild(inputSubmitAddImage)
+
+
+// Créer une fonction pour fermer la modale
+function closeModalAddImage() {
+  const modalAddImageAdmin = document.getElementById('modale-add-image-admin');
+  modalAddImageAdmin.remove();
+}
+
+// Ajouter un gestionnaire d'événement au bouton de fermeture
+buttonCloseModalAddImage.addEventListener('click', (event) => {
+  closeModalAddImage();
+});
+
+// Ajouter un gestionnaire d'événement à la fenêtre pour fermer la modale en cliquant à l'extérieur
+window.addEventListener('click', (event) => {
+  if (event.target === modalAddImageAdmin) {
+    closeModalAddImage();
+  }
+});
+
+    }
+
+
+      // ajouter une photo
+
+  buttonAddImage.addEventListener('click', (event) => {
+    closeModal()
+    openModalAddImage()
+  })
 
     })
 
