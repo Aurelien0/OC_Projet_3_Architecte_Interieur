@@ -356,13 +356,14 @@ footer nav ul {
 	top: 0;
 	left: 0;
 	background: rgba(0, 0, 0, 0.3);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .modale-manage-project-admin-wrapper, .modale-add-image-admin-wrapper {
-	position: fixed;
+	position: sticky;
 	width: 425px;
-	top: 10%;
-	left: 28.125%;
 	background-color: white;
 	padding: 50px 100px 45px 100px;
 	text-align: center;
@@ -430,6 +431,7 @@ footer nav ul {
 }
 
 #delete-all-image {
+	cursor: pointer;
 	color: #D65353;
 }
 
