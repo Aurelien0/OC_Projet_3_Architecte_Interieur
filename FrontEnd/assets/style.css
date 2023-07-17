@@ -2,12 +2,6 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
-html {
-	background-color: #fffef8;
-	scroll-behavior: smooth;
-}
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -28,41 +22,57 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 }
+
 ol, ul {
 	list-style: none;
 }
+
 blockquote, q {
 	quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
 /** end reset css**/
+
+/* Général */
+html {
+	background-color: #fffef8;
+	scroll-behavior: smooth;
+}
+
 body {
 	max-width: 1140px;
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0
 }
+
 section {
 	margin: 50px 0
 }
@@ -80,7 +90,6 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
 h2{
@@ -105,6 +114,7 @@ nav ul {
 	list-style-type: none;
 
 }
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
@@ -113,13 +123,17 @@ nav li {
 li:hover {
 	color: #B1663C;
 }
+
+/* Section #introduction */
 #introduction {
 	display: flex;
 	align-items: center;
 }
+
 #introduction figure {
 	flex: 1
 }
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -129,6 +143,7 @@ li:hover {
 #introduction article {
 	flex: 1
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -149,10 +164,12 @@ li:hover {
 	width: 100%;
 
 }
+
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
+
 #contact > * {
 	text-align: center;
 
@@ -173,9 +190,11 @@ margin: auto;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
 #contact label {
 	margin: 2em 0 1em 0;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -198,9 +217,7 @@ footer nav ul {
 	margin: 2em
 }
 
-
 /* Section portfolio */
-
 #filter-bar {
     display: flex;
     justify-content: center;
@@ -235,16 +252,13 @@ footer nav ul {
 #portfolio ul {
 	list-style-type: none;
 }
-
 /* Fin section portfolio */ 
 
 /* Page login.html */
-
 #login form {
 	display: flex;
 	flex-direction: column;
 }
-
 
 #login input {
 	height: 50px;
@@ -263,7 +277,7 @@ footer nav ul {
 	text-align: center;
 	border-radius: 60px;
 	border: none;
-  }
+}
 
 #login label {
 	margin: 2em 0 1em 0;
@@ -287,8 +301,7 @@ footer nav ul {
 	color: #1D6154;
 }
 
-/* Version admin */
-  
+/* Version lorsqu'un utilisateur est connecté - Admin */
 .header-admin {
 	display: flex;
 	align-items: center;
@@ -315,7 +328,7 @@ footer nav ul {
 	font-family: Work Sans;
 }
 
-#button-modifier-admin {
+#button-modifier-admin, #button-modifier-intro-admin {
 	cursor: pointer;
 	border: none;
 	background-color: #fffef8;
@@ -324,17 +337,29 @@ footer nav ul {
 	padding: 10px;
 }
 
-#button-modifier-admin:hover {
+#button-modifier-admin:hover, #button-modifier-intro-admin:hover {
 	background-color: #1D6154;
 	color: white;
 	border-radius: 60px;
 }
 
-#button-modifier-admin p {
+#button-modifier-admin p, #button-modifier-intro-admin p {
 	display: inline;
 	vertical-align: text-bottom;
 	line-height: 18px;
 	padding-left: 5px;
+}
+
+#button-modifier-intro-admin {
+	position: relative;
+	bottom: -6px;
+	width: 113px;
+	margin-left: 8%;
+}
+
+#button-modifier-intro-admin img{
+	display: inline-block;
+	width: 20%;
 }
 
 #titre-portfolio {
@@ -348,7 +373,7 @@ footer nav ul {
 	text-align: center;
 }
 
-/* Modal Manage projects Admin */ 
+/* Modale pour gérer les projets - Admin */ 
 #modale-manage-project-admin, #modale-add-image-admin {
 	position: fixed;
 	width: 100%;
@@ -399,6 +424,7 @@ footer nav ul {
 	padding-bottom: 45px;
 	margin-bottom: 35px;
 	border-bottom: 1px solid #B3B3B3;
+	text-align: left;
 }
 
 .apercu-image-modal {
@@ -435,6 +461,7 @@ footer nav ul {
 	color: #D65353;
 }
 
+/* Modale pour ajouter un projet au portfolio */
 #form-modal-add-image {
 	display: flex;
 	flex-direction: column;
@@ -445,16 +472,17 @@ footer nav ul {
 #div-file-add-image {
 	display: flex;
 	flex-direction: column;
-
 	width: 420px;
-	height: 169px;
 	background-color: #E8F1F6;
+	margin-bottom: 30px;
 }
 
 #div-file-add-image img {
 	height: 50px;
 	width: 58px;
 	margin: auto;
+	margin-top: 22px;
+	margin-bottom: 15px;
 }
 
 #input-file-add-image {
@@ -469,4 +497,49 @@ footer nav ul {
 	width: 173px;
 	border: none;
 	margin: auto;
+	margin-bottom: 7px;
+	cursor: pointer;
 }
+
+#div-file-add-image p {
+	font-size: 10px;
+	margin-bottom: 19px;
+}
+
+.modale-add-image-admin-wrapper h2 {
+	margin-bottom: 36px;
+}
+
+#form-modal-add-image select, input[type="text"] {
+	width: 420px;
+	height: 51px;
+	box-shadow: 0px 4px 14px 0px #00000017;
+	background-color: #FFF;
+	border: none;
+	margin-bottom: 21px;
+}
+
+#form-modal-add-image select {
+	cursor: pointer;
+}
+
+#form-modal-add-image label {
+	align-self: baseline;
+	margin-bottom: 10px;
+}
+
+#form-modal-add-image input[type="submit"]{
+	width: 237px;
+	height: 36px;
+	background-color: #A7A7A7;
+	cursor: pointer;
+	border: none;
+	margin-bottom: 6px;
+}
+
+.bar {
+	width: 100%;
+	margin-top: 26px;
+	height: 1px;
+	background-color: #B3B3B3;
+  }

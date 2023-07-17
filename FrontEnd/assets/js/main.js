@@ -115,8 +115,6 @@ let token = localStorage.getItem('token')
 
 var url = window.location.href
 
-
-console.log(token)
 // Si on a un token d'authentification, alors affichier la version admin
 if (token) {
     // Attendre que la page soit chargée
@@ -161,6 +159,8 @@ if (token) {
         // Ajout des "button" modifier en version admin
         const projetContainer = document.getElementById('titre-portfolio')
 
+        const introContainer = document.getElementById('img-intro')
+
         const buttonModifier = document.createElement('button')
         buttonModifier.id = 'button-modifier-admin'
         const texteButtonModifier = document.createElement('p')
@@ -168,10 +168,26 @@ if (token) {
 
         let iconHeaderAdminBlack = document.createElement('img')
         iconHeaderAdminBlack.src = './assets/icons/group-black.png'
-        iconHeaderAdminBlack.alt = 'icon'
+        iconHeaderAdminBlack.alt = 'icone de modification'
+
+
+        const buttonModifierIntro = document.createElement('button')
+        buttonModifierIntro.id = 'button-modifier-intro-admin'
+
+        const texteButtonModifierIntro = document.createElement('p')
+        texteButtonModifierIntro.textContent = 'modifier'
+
+        const iconHeaderAdminBlackIntro = document.createElement('img')
+        iconHeaderAdminBlackIntro.src = './assets/icons/group-black.png'
+        iconHeaderAdminBlackIntro.alt = 'icone de modification'
+        
 
         buttonModifier.appendChild(iconHeaderAdminBlack)
         buttonModifier.appendChild(texteButtonModifier)
+
+        introContainer.appendChild(buttonModifierIntro)
+        buttonModifierIntro.appendChild(iconHeaderAdminBlackIntro)
+        buttonModifierIntro.appendChild(texteButtonModifierIntro)
 
         const troisiemeEnfantPortfolio = projetContainer.children[1]
         projetContainer.insertBefore(buttonModifier, troisiemeEnfantPortfolio)
@@ -257,6 +273,8 @@ if (token) {
                                         if (statusCode === 200 || statusCode === 204) {
                                             liApercuImageModal.remove() // Supprime l'élément de la liste
                                             alert(`Vous avez bien supprimer la photo avec l'id ${actuelDataCompteurModal}`)
+                                        } else if (statusCode === 401) {
+                                            alert(`Token d'authentification invalide, veuillez vous reconnecter`)
                                         }
                                     })
                                     .catch(error => {
@@ -328,8 +346,6 @@ if (token) {
                   
                     const deletePromises = Array.from(elementsToDelete).map((element) => {
                       const actuelDataCompteurModal2 = element.dataset.id
-
-                      console.log(actuelDataCompteurModal2)
                   
                       return fetch(`http://localhost:5678/api/works/${actuelDataCompteurModal2}`, {
                         method: 'DELETE',
@@ -344,7 +360,7 @@ if (token) {
                           element.remove()
                           alert('Vous avez supprimé toutes les photos avec succès.')
                         } else if (statusCode === 401) {
-                            alert('Vous n\'êtes pas autorisé à la suppression de projet')
+                            alert(`Token d'authentification invalide, veuillez vous reconnecter`)
                         }
                       })
                       .catch(error => {
@@ -393,6 +409,7 @@ if (token) {
 
                 const formModalAddImage = document.createElement('form')
                 formModalAddImage.id = 'form-modal-add-image'
+                formModalAddImage.setAttribute('enctype', 'multipart/form-data');
 
                 const divFileAddImage = document.createElement('div')
                 divFileAddImage.id = 'div-file-add-image'
@@ -424,6 +441,8 @@ if (token) {
 
                     if (file) {
 
+                        localStorage.setItem('file', file)
+
                         const divFileAddImage = document.getElementById('div-file-add-image')
                         const buttonFileAddImage = document.getElementById('button-file-add-image')
 
@@ -436,21 +455,49 @@ if (token) {
                           // Efface les anciennes images prévisualisées
                           divFileAddImage.remove()
                           // Ajoute la nouvelle image prévisualisée
+// Sélectionner l'élément formModalAddImage
+const formModalAddImage = document.getElementById("form-modal-add-image");
+
+// Créer une nouvelle div
+const newDivFileAddImage = document.createElement("div");
+newDivFileAddImage.id = 'div-file-add-image'
+
+
+                        const inputFileAddimage = document.createElement('input')
+                        inputFileAddimage.id = 'input-file-add-image'
+                        inputFileAddimage.type = 'file'
+                        inputFileAddimage.accept = '.png, .jpg'
+
                           const newButtonFileAddImage = document.createElement('button')
-                          newButtonFileAddImage.id = 'button-file-add-image'
-                          divFileAddImage.appendChild(newButtonFileAddImage)
+                          newButtonFileAddImage.id = 'new-button-file-add-image'
+
+                          buttonFileAddImage.addEventListener('click', (event) => {
+                            event.preventDefault()
+                            document.getElementById('input-file-add-image').click()
+                        })
+
+                        newButtonFileAddImage.addEventListener('click', (event) => {
+                            event.preventDefault()
+                            document.getElementById('input-file-add-image').click()
+                        })
+
+                          formModalAddImage.insertBefore(newDivFileAddImage, formModalAddImage.firstChild);
+                          newDivFileAddImage.appendChild(newButtonFileAddImage)
+                          newDivFileAddImage.appendChild(inputFileAddimage)
                           newButtonFileAddImage.appendChild(imageElement)
                         })
                     
                         reader.readAsDataURL(file) // Lit le fichier en tant que données URL
                       }
 
-                    
+                    const newButtonFileAddImage = document.getElementById('new-button-file-add-image')
                     // // Réinitialise l'input de type file lors du clic sur le bouton "Ajouter l'image"
-                    // buttonFileAddImage.addEventListener('click', function() {
-                    //   inputFileAddimage.value = ''
-                    //   imagePreviewContainer.innerHTML = '' // Efface l'image prévisualisée
-                    // })
+                    newButtonFileAddImage.addEventListener('click', function() {
+                        
+                      inputFileAddimage.value = ''
+                      newButtonFileAddImage.innerHTML = '' // Efface l'image prévisualisée
+                    })
+
 
                     // Vérifier la taille du fichier
                     const maxSize = 4 * 1024 * 1024 // 4 Mo en octets
@@ -474,6 +521,8 @@ if (token) {
                 const selectCategoriesAddImageModal = document.createElement('select')
                 selectCategoriesAddImageModal.id = 'select-categories-add-image-modal'
 
+                const separationBar = document.createElement('div')
+                separationBar.classList = 'bar'
 
                 const inputSubmitAddImage = document.createElement('input')
                 inputSubmitAddImage.type = 'submit'
@@ -528,7 +577,8 @@ if (token) {
 
                 loadCategoryAddImageModal()
 
-
+                // Ajouter les derniers éléments à la modale d'ajout de projet
+                formModalAddImage.appendChild(separationBar)
                 formModalAddImage.appendChild(inputSubmitAddImage)
 
 
@@ -537,8 +587,13 @@ if (token) {
 
                     const optionCategoriesAddImageModal = document.getElementById('option-categories-add-image-modal')
 
-                    // Récupérer les valeurs des champs du formulaire
-                    // const file = document.getElementById('input-file-add-image').files[0]
+                   // Récupérer les valeurs des champs du formulaire
+                    // const file = localStorage.getItem('file')
+                    const file = localStorage.getItem('file')
+                    console.log(file)
+
+                    const fileImageUpload = document.getElementById('input-file-add-image')
+
                     // const file = event.target.files[0];
                     // const reader = new FileReader()
 
@@ -555,36 +610,45 @@ if (token) {
 
                     const title = inputTitleAddImageModal.value
                     // const category = selectCategoriesAddImageModal
-                    const category = optionCategoriesAddImageModal.dataset.categoryId
+                    // const category = optionCategoriesAddImageModal.dataset.categoryId
 
-                    console.log(title)
-                    console.log(category)
+                    const selectedOption = selectCategoriesAddImageModal.options[selectCategoriesAddImageModal.selectedIndex];
+                    const category = selectedOption.getAttribute('data-category-id');
+
+
 
                     // localStorage.getItem('imageUrl')
 
                     // const imageUrlAfterLocalStorage = imageUrl
 
                     // Créer un objet data pour envoyer les données du formulaire
-                    const data = {
-                        image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABxSURBVHgB7ZTBCYAwDEW/TuAIjtARO0pGcANncILgBI6gqUQogpc00h764JVQ6CclEKACQWR1hgMp8BBPNaKQd2Bxpz3wrgOMDPp4FafsfhE32KB0cNahhzziB76+T+IOG/QU7pPvwfWCI5xwX9JtcQEFvk9+WyiWJgAAAABJRU5ErkJggg==",
-                        title: title,
-                        category: parseInt(category)
-                    }
+                    // const data = {
+                    //     image: file,
+                    //     title: title,
+                    //     category: parseInt(category)
+                    // }
 
-                    console.log(data)
+                    // console.log(data)
+
+                    const formData = new FormData();
+                    formData.append('image', fileImageUpload.files[0]);
+                    formData.append('title', title);
+                    formData.append('category', category);
 
                     // Effectuer la requête Fetch pour envoyer les données
                     fetch('http://localhost:5678/api/works', {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json',
+                                // 'Content-Type': 'multipart/form-data',
                                 'Authorization': `Bearer ${token}`
                             },
-                            body: JSON.stringify(data)
+                            body: formData
                         })
                         .then(response => {
                             if (response.status === 201) {
                                 alert('Projet ajouté avec succès.')
+                            } else if (response.status === 401) {
+                                alert(`Token d'authentification invalide, veuillez vous reconnecter`)
                             }
                         })
                         .catch(error => {
