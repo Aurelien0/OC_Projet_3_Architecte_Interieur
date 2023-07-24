@@ -501,6 +501,20 @@ footer nav ul {
 	cursor: pointer;
 }
 
+#button-file-add-image-preview {
+	border: none;
+	height: 169px;
+	width: 420px;
+}
+
+#button-file-add-image-preview img {
+	height: 169px;
+	max-width: 100%;
+	width: auto;
+	margin: 0;
+
+}
+
 #div-file-add-image p {
 	font-size: 10px;
 	margin-bottom: 19px;
