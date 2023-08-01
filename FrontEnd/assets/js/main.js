@@ -199,6 +199,8 @@ if (token) {
          createModal()
       })
 
+
+
    }) // Fin du gestionnaire d'évènement pour attendre que la page soit chargée
 
 } // Fin de la version admin si l'on est connecté

@@ -409,21 +409,55 @@ function openModalAddImage() {
          })
          .then(response => {
             if (response.status === 201) {
-               alert('Projet ajouté avec succès.')
+               return response.json();
             } else if (response.status === 401) {
                alert(`Token d'authentification invalide, veuillez vous reconnecter`)
             } else if (response.status === 500) {
                alert('il y a une erreur pour ajouter le projet')
             }
          })
+         // récupérer les données du nouveau projet
+         .then(data => {
+            // Créer le nouveau projet
+            const galleryContainer = document.querySelector('.gallery');
+            if (galleryContainer && data) {
+               const newProject = document.createElement('li');
+               newProject.classList.add('projet');
+               newProject.dataset.value = data.categoryId;
+               newProject.dataset.id = data.id;
+         
+               const newProjectImage = document.createElement('img');
+               newProjectImage.classList.add('projet-image');
+               newProjectImage.src = data.imageUrl;
+               newProjectImage.alt = data.title;
+         
+               const newProjectTitle = document.createElement('h3');
+               newProjectTitle.classList.add('projet-title');
+               newProjectTitle.textContent = data.title;
+         
+               newProject.appendChild(newProjectImage);
+               newProject.appendChild(newProjectTitle);
+               galleryContainer.appendChild(newProject);
+
+               // Revenir au menu de la modale
+               closeModalAddImage()
+               createModal()
+      
+               alert('Projet ajouté avec succès.')
+            } else {
+               alert('Erreur pour afficher le nouveau projet dans la gallerie.');
+            }
+         })
+
          .catch(error => {
             console.error('Erreur lors de l\'envoi de la requête:', error)
             alert('Une erreur s\'est produite lors de l\'ajout du projet.')
          })
 
-      // Réinitialiser le formulaire d'ajout de projet
-      formModalAddImage.reset()
-   })
+         // Réinitialiser le formulaire d'ajout de projet
+         formModalAddImage.reset()
+
+   }) // Fin de l'envoi du formulaire formModalAddImage
 
    // Créer une fonction pour fermer la modale d'ajout de projet
    function closeModalAddImage() {
